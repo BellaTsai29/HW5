@@ -11,16 +11,19 @@
 
 訂單管理：查詢訂單資訊，包括 紅茶、綠茶、奶茶數量 及 總額計算。
 
-MySQL 數據庫連接：從 customer 和 porder 兩張表中獲取數據。
+員工管理：管理員工 (employee) 資訊，包括員工編號 (number)、姓名 (name) 等。
 
-JFrame 介面：圖形化 UI，包含登入頁、訂單頁、錯誤提示頁。
+物料管理：管理物料 (material)，記錄原料的存量與使用情況。
 
+MySQL 數據庫連接：從 customer、porder、employee 和 material 四張表中獲取數據。
+
+JFrame 介面：圖形化 UI，包含登入頁、訂單頁、員工管理頁、錯誤提示頁。
 
 🔧 環境設置
 
 1️⃣ 安裝 MySQL 資料庫
 
-請確保你的 MySQL 伺服器已安裝，並建立以下兩張表：
+請確保你的 MySQL 伺服器已安裝，並建立以下四張表：
 
 CREATE DATABASE drink_order;
 USE drink_order;
@@ -41,15 +44,23 @@ CREATE TABLE porder (
     FOREIGN KEY (customer_id) REFERENCES customer(id)
 );
 
+CREATE TABLE employee (
+    number VARCHAR(10) PRIMARY KEY,
+    name VARCHAR(50),
+    phone VARCHAR(20),
+    address VARCHAR(100),
+    password VARCHAR(50)
+);
+
+CREATE TABLE material (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(50),
+    quantity INT DEFAULT 0
+);
 
 2️⃣ 設置 Java 連線 MySQL
 
 請修改 LoginUI.java 中的 資料庫連線資訊：
-
-private static final String URL = "jdbc:mysql://localhost:3306/drink_order";
-private static final String USER = "root";
-private static final String PASSWORD = "your_password";
-
 
 
 3️⃣ 執行專案
