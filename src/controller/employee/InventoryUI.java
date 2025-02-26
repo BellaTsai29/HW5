@@ -189,6 +189,22 @@ public class InventoryUI extends JFrame {
         btnQuery.setContentAreaFilled(false);
         btnQuery.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         panelQuery.add(btnQuery);
+        
+        JButton btnQuery_2 = new JButton("刪除");
+        btnQuery_2.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		deleteOrderById(tfQueryBranch.getText());
+        		loadOrders();
+        		
+        	}
+        });
+        btnQuery_2.setFont(new Font("SansSerif", Font.PLAIN, 18));
+        btnQuery_2.setFocusPainted(false);
+        btnQuery_2.setContentAreaFilled(false);
+        btnQuery_2.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        btnQuery_2.setBounds(397, 25, 100, 30);
+        panelQuery.add(btnQuery_2);
         btnQuery.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (tfQueryBranch.getText().trim().isEmpty()) {
@@ -342,6 +358,24 @@ public class InventoryUI extends JFrame {
         
         loadOrders();
     }
+    
+    private void deleteOrderById(String name) {
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement pstmt = conn.prepareStatement("DELETE FROM inventory WHERE branch = ?")) {
+            
+            pstmt.setString(1, name);
+            int count = pstmt.executeUpdate();
+            if (count > 0) {
+                JOptionPane.showMessageDialog(null, "成功刪除該筆資料", "提示", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "查無該筆資料", "提示", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "刪除失敗：" + e.getMessage(), "錯誤", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     
     // 讀取所有庫存
     private void loadOrders() {

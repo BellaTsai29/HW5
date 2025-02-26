@@ -1,5 +1,8 @@
 package controller;
 import java.awt.EventQueue;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -60,6 +63,24 @@ public class DrinkUI extends JFrame {
 				}
 			}
 		});
+	}
+	
+	public class NumericDocumentFilter extends DocumentFilter {
+	    @Override
+	    public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+	            throws BadLocationException {
+	        if (string.matches("[0-9]*")) {
+	            super.insertString(fb, offset, string, attr);
+	        }
+	    }
+	    
+	    @Override
+	    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+	            throws BadLocationException {
+	        if (text.matches("[0-9]*")) {
+	            super.replace(fb, offset, length, text, attrs);
+	        }
+	    }
 	}
 
 	/**
@@ -141,21 +162,28 @@ public class DrinkUI extends JFrame {
 		name.setBounds(74, 105, 96, 21);
 		contentPane.add(name);
 		name.setColumns(10);
-		
+		((javax.swing.text.AbstractDocument) name.getDocument()).setDocumentFilter(new NumericDocumentFilter());
+
+
 		black = new JTextField();
 		black.setColumns(10);
 		black.setBounds(74, 145, 96, 21);
 		contentPane.add(black);
-		
+		((javax.swing.text.AbstractDocument) black.getDocument()).setDocumentFilter(new NumericDocumentFilter());
+
+
 		green = new JTextField();
 		green.setColumns(10);
 		green.setBounds(74, 185, 96, 21);
 		contentPane.add(green);
-		
+		((javax.swing.text.AbstractDocument) green.getDocument()).setDocumentFilter(new NumericDocumentFilter());
+
 		milk = new JTextField();
 		milk.setColumns(10);
 		milk.setBounds(74, 231, 96, 21);
 		contentPane.add(milk);
+		((javax.swing.text.AbstractDocument) milk.getDocument()).setDocumentFilter(new NumericDocumentFilter());
+
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(228, 77, 198, 90);
@@ -174,10 +202,20 @@ public class DrinkUI extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				
-				String Name=name.getText();
-				String Black=black.getText();
-				String Milk=milk.getText();
-				String Green=green.getText();
+				String Name;
+				String Black;
+				String Milk;
+				String Green;
+				
+				if(name.getText().trim().isEmpty()) Name = "0";
+				else Name=name.getText();
+				if(black.getText().trim().isEmpty()) Black = "0";
+				else Black=black.getText();
+				if(milk.getText().trim().isEmpty()) Milk = "0";
+				else Milk=milk.getText();
+				if(green.getText().trim().isEmpty()) Green = "0";
+				else Green=green.getText();
+
 				
 				Drink D=new Drink (Integer.parseInt(Milk),Integer.parseInt(Black),Integer.parseInt(Green),Name);
 				
@@ -242,8 +280,6 @@ public class DrinkUI extends JFrame {
                 }
             }
         });
-
-        frame.setVisible(true);
     
 
         btnNewButton_1.setBounds(341, 230, 85, 23);
